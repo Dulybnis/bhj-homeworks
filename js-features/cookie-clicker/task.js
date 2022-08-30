@@ -1,7 +1,7 @@
 let counter = document.getElementById("clicker__counter");
 let speed = document.getElementById("clicker__speed");
 let image = document.getElementById("cookie");
-let sizer = "normal";
+//let sizer = "normal";
 let time = [];
 
 image.onclick = function(){
@@ -11,13 +11,14 @@ image.onclick = function(){
 }
 
 resize = function(){
-    if (sizer === "large"){
+    image.width === 200 ? image.width = 220 : image.width = 200; //тернарный оператор вместо условной конструкции
+    /*if (sizer === "large"){
         image.width -= 20;
         sizer = "small";
     } else {
         image.width += 20;
         sizer = "large";
-    }
+    }*/
 }
 
 getTime = function(){
