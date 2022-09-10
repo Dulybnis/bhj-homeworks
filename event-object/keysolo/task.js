@@ -4,6 +4,9 @@ class Game {
     this.wordElement = container.querySelector('.word');
     this.winsElement = container.querySelector('.status__wins');
     this.lossElement = container.querySelector('.status__loss');
+    this.timeStatus = container.querySelector('.status__time');
+    this.time;
+    this.clock;
 
     this.reset();
 
@@ -14,6 +17,8 @@ class Game {
     this.setNewWord();
     this.winsElement.textContent = 0;
     this.lossElement.textContent = 0;
+    this.timeStatus.textContent = this.time;
+    this.timer();
   }
 
   registerEvents() {
@@ -24,6 +29,29 @@ class Game {
       В случае правильного ввода слова вызываем this.success()
       При неправильном вводе символа - this.fail();
      */
+      
+      function keyCode(event) {
+        if ((this.currentSymbol.textContent).charCodeAt() - 32 === event.keyCode) {
+          this.success();
+        } else {
+          this.fail();
+        }
+      }
+
+      let keyPress = keyCode.bind(this);
+      document.addEventListener("keydown", keyPress);
+  }
+
+  timer() {    
+    this.clock = setInterval(() => {
+      this.time = Math.round((this.time - 0.1) * 10) / 10;
+      if (this.time <= 0) {
+        this.timeStatus.textContent = 0;
+        this.fail();
+      };
+      this.timeStatus.textContent = this.time;
+      console.log("timer is done");
+    }, 100);
   }
 
   success() {
@@ -35,6 +63,7 @@ class Game {
 
     if (++this.winsElement.textContent === 10) {
       alert('Победа!');
+      clearInterval(this.clock);
       this.reset();
     }
     this.setNewWord();
@@ -43,14 +72,16 @@ class Game {
   fail() {
     if (++this.lossElement.textContent === 5) {
       alert('Вы проиграли!');
+      clearInterval(this.clock);
       this.reset();
     }
     this.setNewWord();
+    this.timeStatus.textContent = this.time;
   }
 
   setNewWord() {
     const word = this.getWord();
-
+    this.time = word.length;
     this.renderWord(word);
   }
 
@@ -84,6 +115,8 @@ class Game {
 
     this.currentSymbol = this.wordElement.querySelector('.symbol_current');
   }
+
+  
 }
 
 new Game(document.getElementById('game'))
